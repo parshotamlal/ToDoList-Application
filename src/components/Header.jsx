@@ -128,3 +128,4 @@ const Header = ({ totalTasks, completedTasks, onAddTask }) => {
 };
 
 export default Header;
+

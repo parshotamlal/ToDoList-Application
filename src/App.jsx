@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ToDoItem from './components/ToDoItem';
 import Header from './components/Header';
 import ToDoList from './components/ToDoList';
-import './index.css';
-
+import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
 
   // Load from localStorage
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
-    const savedTheme = localStorage.getItem('theme');
-    
     if (savedTodos) {
       const parsedTodos = JSON.parse(savedTodos).map((todo) => ({
         ...todo,
-        createdAt: new Date(todo.createdAt)
+        createdAt: new Date(todo.createdAt),
       }));
       setTodos(parsedTodos);
-    }
-    if (savedTheme) {
-      setDarkMode(savedTheme === 'dark');
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     }
   }, []);
 
@@ -31,12 +24,6 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  // Save theme preference
-  useEffect(() => {
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
-
   const addTodo = (text) => {
     const newTodo = {
       id: crypto.randomUUID(),
@@ -44,51 +31,35 @@ function App() {
       completed: false,
       createdAt: new Date(),
     };
-    setTodos(prev => [newTodo, ...prev]);
+    setTodos((prev) => [newTodo, ...prev]);
   };
 
   const toggleTodo = (id) => {
-    setTodos(prev =>
-      prev.map(todo =>
+    setTodos((prev) =>
+      prev.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
   };
 
   const deleteTodo = (id) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   const editTodo = (id, newText) => {
-    setTodos(prev =>
-      prev.map(todo =>
+    setTodos((prev) =>
+      prev.map((todo) =>
         todo.id === id ? { ...todo, text: newText } : todo
       )
     );
   };
 
-  const completedTasks = todos.filter(todo => todo.completed).length;
+  const completedTasks = todos.filter((todo) => todo.completed).length;
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 
-      ${darkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-purple-50 text-gray-900'}`}
-    >
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="px-3 py-2 rounded-xl text-sm font-medium 
-              bg-white/30 dark:bg-gray-700/50 backdrop-blur-lg
-              shadow-md hover:shadow-lg transition-all duration-300
-              hover:scale-105"
-          >
-            {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
-
-        <div className="p-6 rounded-3xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-md shadow-xl transition-all duration-300">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="max-w-lg w-full px-6 py-8">
+        <div className="p-6 rounded-3xl bg-white/40 backdrop-blur-md shadow-xl">
           <Header
             totalTasks={todos.length}
             completedTasks={completedTasks}
