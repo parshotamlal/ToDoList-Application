@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 /* In your global CSS (index.css or App.css) */
 html, body, #root {
   height: 100%;

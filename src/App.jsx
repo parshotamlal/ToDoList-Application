@@ -1,3 +1,4 @@
+// Main React imports: Core library + Hooks for state and lifecycle
 import React, { useEffect, useState } from 'react';
 import ToDoItem from './components/ToDoItem';
 import Header from './components/Header';
@@ -24,6 +25,7 @@ function App() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
+  // Add a new task
   const addTodo = (text) => {
     const newTodo = {
       id: crypto.randomUUID(),
@@ -33,7 +35,9 @@ function App() {
     };
     setTodos((prev) => [newTodo, ...prev]);
   };
-
+ 
+  
+  // Toggle completion status of a task
   const toggleTodo = (id) => {
     setTodos((prev) =>
       prev.map((todo) =>
@@ -41,7 +45,7 @@ function App() {
       )
     );
   };
-
+// delete todo task
   const deleteTodo = (id) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
@@ -53,7 +57,7 @@ function App() {
       )
     );
   };
-
+// completed task
   const completedTasks = todos.filter((todo) => todo.completed).length;
 
   return (
@@ -76,5 +80,5 @@ function App() {
     </div>
   );
 }
-
+// export the app into main file
 export default App;
